@@ -1,10 +1,10 @@
 {
-    "name": "a-class-above",
-    "version": "0.0.9",
-    "main": "./scripts/a_class_above.js",
+    "name": "super-model",
+    "version": "0.0.1",
+    "main": "./dist/super-model.js",
     "dependencies": {
         "angular": ">1.0.0",
-        "a-class-above": "~0.0.10"
+        "a-class-above": ">0.0.10"
     },
 	"devDependencies": {
 		"angular-mocks": "~1.2.0-rc.3"
