@@ -1,9 +1,11 @@
 module.exports = function(grunt) {
     
+    
     // configurable paths
     var yeomanConfig = {
         app: 'app',
-        dist: 'dist'
+        dist: 'dist',
+        main: 'super_model'
     };
 
     try {
@@ -25,7 +27,7 @@ module.exports = function(grunt) {
                         'bower_components/angular/angular.js',
                         'bower_components/angular-mocks/angular-mocks.js',
                         'bower_components/a-class-above/dist/a_class_above.js',
-                        'scripts/super_model.js', 
+                        'scripts/<%= yeoman.main %>.js', 
                         'scripts/**/*.js',
                         'spec/**/*.js']
                 }
@@ -54,13 +56,13 @@ module.exports = function(grunt) {
         
         concat: {
             dist: {
-                src: ['scripts/a_class_above.js', 'scripts/**/*.js'],
-                dest: '<%= yeoman.dist %>/a_class_above.js',
+                src: ['scripts/<%= yeoman.main %>.js', 'scripts/**/*.js'],
+                dest: '<%= yeoman.dist %>/<%= yeoman.main %>.js',
             },
         },
         
         uglify: {
-            '<%= yeoman.dist %>/a_class_above.min.js': [ '<%= yeoman.dist %>/a_class_above.js' ] 
+            '<%= yeoman.dist %>/<%= yeoman.main %>.min.js': [ '<%= yeoman.dist %>/<%= yeoman.main %>.js' ] 
         }
     });
     
