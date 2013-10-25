@@ -12,8 +12,7 @@ angular.module('SuperModel')
                     angular.forEach(arguments, function(arg){
                         this.definedCallbacks().set(arg, {
                             before: [], 
-                            after: [], 
-                            // we need one around callback to make sure the action gets called.  see runCallbacks below
+                            after: [],
                             around: []
                         });
                     }.bind(this));                    
@@ -54,12 +53,12 @@ angular.module('SuperModel')
                         block.apply(this); 
                     } else {
                         
-                        // Loop backwards through the callbacks, passing each callback
-                        // into the previous one, creating the callback chain.
+                        //Loop backwards through the callbacks, passing each callback
+                        //into the previous one, creating the callback chain.
                         
-                        // The trigger is the callback that will start off the chain. As
-                        // we move back through the list of callbacks, eventually the first
-                        // one will become the trigger we actually use
+                        //The trigger is the callback that will start off the chain. As
+                        //we move back through the list of callbacks, eventually the first
+                        //one will become the trigger we actually use
                         var trigger = block.bind(this);;
                         for (var i = aroundCallbacks.length - 1; i >=0; i--) {
                             var callback = aroundCallbacks[i];

@@ -24,7 +24,8 @@ module.exports = function(grunt) {
                         'karma/phantomjs-hacks.js',
                         'bower_components/angular/angular.js',
                         'bower_components/angular-mocks/angular-mocks.js',
-                        'scripts/a_class_above.js', 
+                        'bower_components/a-class-above/dist/a_class_above.js',
+                        'scripts/super_model.js', 
                         'scripts/**/*.js',
                         'spec/**/*.js']
                 }
