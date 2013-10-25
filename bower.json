@@ -1,0 +1,11 @@
+{
+    "name": "a-class-above",
+    "version": "0.0.9",
+    "main": "./scripts/a_class_above.js",
+    "dependencies": {
+        "angular": ">1.0.0"
+    },
+	"devDependencies": {
+		"angular-mocks": "~1.2.0-rc.3"
+	}
+}
