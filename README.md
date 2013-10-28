@@ -35,4 +35,4 @@ or
 
 ### Documentation
 
-[0.0.4](http://www.pedago.com/super_model/docs/0.0.4)
+[0.0.4](http://www.pedago.com/super-model/docs/0.0.4)
