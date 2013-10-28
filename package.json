@@ -1,6 +1,6 @@
 {
   "name": "super-model",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Provides a set of interfaces for use in model classes, similar to active-model in ruby.",
   "repository": {
     "url": "https://github.com/pedago/a-class-above.git",
