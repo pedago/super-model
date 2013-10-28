@@ -28,10 +28,17 @@ From the bower.json file
 	
 In your html
 
+	<script type="text/javascript" src="bower_components/a-class-above/dist/a_class_above.js"></script>
     <script type="text/javascript" src="bower_components/super-model/dist/super_model.js"></script>
 or
 
+	<script type="text/javascript" src="bower_components/a-class-above/dist/a_class_above.min.js"></script>
     <script type="text/javascript" src="bower_components/super-model/dist/super_model.min.js"></script>
+
+### Dependencies
+
+super-model uses [a-class-above](https://github.com/pedago/a-class-above) for OOP.  Please see the documentation
+there for more information.
 
 ### Documentation
 
