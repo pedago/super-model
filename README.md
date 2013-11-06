@@ -21,7 +21,7 @@ From the bower.json file
     {
 	    "...
 	    "dependencies": {
-	        "super-model": "0.0.5"
+	        "super-model": "0.0.7"
 	    },
 		...
 	}
