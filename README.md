@@ -42,5 +42,6 @@ there for more information.
 
 ### Documentation
 
+[0.0.6](http://www.pedago.com/super-model/docs/0.0.6)  
 [0.0.5](http://www.pedago.com/super-model/docs/0.0.5)  
 [0.0.4](http://www.pedago.com/super-model/docs/0.0.4)  
