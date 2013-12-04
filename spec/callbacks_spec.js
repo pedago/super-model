@@ -160,7 +160,36 @@ describe('SuperModel.Callbacks', function() {
         instance.action();
         expect(calledCount).toBe(1);
         expect(instance.internalAction).toHaveBeenCalled();
-    });   
+    });  
+    
+    it('should not apply callbacks to sibling classes', function() {
+        var subclass1CallbackCalled = false;
+        var subclass2CallbackCalled = false;
+        var SubClass1 = MyModel.subclass(function(){
+            this.setCallback('after', 'action', function() {
+                subclass1CallbackCalled = true;
+            });
+            
+            return {
+                // get rid of this functionality
+                internalAction: function() {}
+            };
+        });
+        var SubClass2 = MyModel.subclass(function(){
+            this.setCallback('after', 'action', function() {
+                subclass2CallbackCalled = true;
+            });
+            
+            return {
+                // get rid of this functionality
+                internalAction: function() {}
+            };
+        });
+        
+        new SubClass1().action();
+        expect(subclass1CallbackCalled).toBe(true);
+        expect(subclass2CallbackCalled).toBe(false);
+    });
 
 
 });
