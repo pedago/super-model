@@ -162,6 +162,7 @@ describe('SuperModel.Callbacks', function() {
         expect(instance.internalAction).toHaveBeenCalled();
     });  
     
+    //see https://trello.com/c/VTRlLmoH/52-supermodel-callbacks-will-be-called-on-sibling-classes
     it('should not apply callbacks to sibling classes', function() {
         var subclass1CallbackCalled = false;
         var subclass2CallbackCalled = false;
