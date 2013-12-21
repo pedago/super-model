@@ -42,9 +42,9 @@ there for more information.
 
 ### Documentation
 
-[0.0.9](http://www.pedago.com/super-model/docs/0.0.9)  
-[0.0.8](http://www.pedago.com/super-model/docs/0.0.8)  
-[0.0.7](http://www.pedago.com/super-model/docs/0.0.7)  
-[0.0.6](http://www.pedago.com/super-model/docs/0.0.6)  
-[0.0.5](http://www.pedago.com/super-model/docs/0.0.5)  
-[0.0.4](http://www.pedago.com/super-model/docs/0.0.4)  
+[0.0.9](http://pedago.github.io/super-model/docs/0.0.9)  
+[0.0.8](http://pedago.github.io/super-model/docs/0.0.8)  
+[0.0.7](http://pedago.github.io/super-model/docs/0.0.7)  
+[0.0.6](http://pedago.github.io/super-model/docs/0.0.6)  
+[0.0.5](http://pedago.github.io/super-model/docs/0.0.5)  
+[0.0.4](http://pedago.github.io/super-model/docs/0.0.4)  
