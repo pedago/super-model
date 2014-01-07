@@ -21,7 +21,7 @@ From the bower.json file
     {
 	    "...
 	    "dependencies": {
-	        "super-model": "0.0.8"
+	        "super-model": "0.0.10"
 	    },
 		...
 	}
@@ -48,3 +48,4 @@ there for more information.
 [0.0.6](http://pedago.github.io/super-model/docs/0.0.6)  
 [0.0.5](http://pedago.github.io/super-model/docs/0.0.5)  
 [0.0.4](http://pedago.github.io/super-model/docs/0.0.4)  
+[0.0.10](http://pedago.github.io/super-model/docs/0.0.10)  
