@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="en"><head><title>spec/callbacks_spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="spec/callbacks_spec"><meta name="groc-project-path" content="spec/callbacks_spec.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">spec/callbacks_spec.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="s1">&#39;use strict&#39;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="supermodelcallbacks">SuperModel.Callbacks</h1>
+
+<p>Callbacks are code hooks that are run at key points in an object's lifecycle. 
+The typical use case is to have a base class define a set of callbacks relevant to the other 
+functionality it supplies, so that subclasses can install callbacks that enhance or modify 
+the base functionality without needing to override or redefine methods of the base class.  </p>
+
+<p>SuperModel allows you to define the events in the object’s lifecycle that will support callbacks 
+(via the class method define<em>callbacks), set the instance methods or functions to be called 
+(via the class method set</em>callback), and run the installed callbacks at the appropriate times (via run_callbacks).  </p>
+
+<p>Three kinds of callbacks are supported:   </p>
+
+<p><strong>before</strong> callbacks, run before a certain event; <br />
+<strong>after</strong> callbacks, run after the event; <br />
+<strong>around</strong> callbacks, blocks that surround the event, triggering the event within the callback.  </p>
+
+<p>Callback code can be contained in instance methods or functions.</p>
+
+<p><a href="#abcd">link text</a></p></div></div><div class="code"><div class="wrapper"> 
+ 
+
+
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;SuperModel.Callbacks&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="kd">var</span> <span class="nx">MyModel</span><span class="p">,</span> <span class="nx">SuperModel</span><span class="p">,</span> <span class="nx">callbacks</span><span class="p">,</span> <span class="nx">calledCount</span><span class="p">;</span>
+
+    <span class="nx">beforeEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">module</span><span class="p">(</span><span class="s1">&#39;SuperModel&#39;</span><span class="p">);</span>
+        <span class="nx">calledCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="nx">inject</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">_SuperModel_</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">SuperModel</span> <span class="o">=</span> <span class="nx">_SuperModel_</span><span class="p">;</span>
+            </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="defining-callbacks">Defining callbacks</h3>
+
+<p>use the class method <em>defineCallbacks</em> to define an event that supports callbacks,
+and then use the classMethod <em>runCallbacks</em> to trigger the callbacks when that
+event occurs.</p></div></div><div class="code"><div class="wrapper">            <span class="nx">MyModel</span> <span class="o">=</span> <span class="nx">SuperModel</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>... </p></div></div><div class="code"><div class="wrapper">                <span class="c1">//define the callback</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">defineCallbacks</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">);</span>
+                
+                <span class="k">return</span> <span class="p">{</span>
+                    <span class="nx">action</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                        <span class="c1">//trigger the callback</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">runCallbacks</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                            <span class="k">this</span><span class="p">.</span><span class="nx">internalAction</span><span class="p">();</span>
+                        <span class="p">});</span>
+                    <span class="p">},</span>
+                    <span class="nx">internalAction</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                        <span class="nx">expect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">constructor</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="nx">MyModel</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">};</span>
+            <span class="p">});</span>
+            
+            <span class="nx">spyOn</span><span class="p">(</span><span class="nx">MyModel</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="s1">&#39;internalAction&#39;</span><span class="p">).</span><span class="nx">andCallThrough</span><span class="p">();</span>
+        <span class="p">});</span>
+
+    <span class="p">});</span>
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="setting-a-before-callback">Setting a before callback</h3>
+
+<p><a id="setting-a-before-callback"></a></p></div></div><div class="code"><div class="wrapper">    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should trigger before callback&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">MyModel</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">calledCount</span> <span class="o">=</span> <span class="nx">calledCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">});</span>
+        <span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyModel</span><span class="p">();</span>
+        <span class="nx">instance</span><span class="p">.</span><span class="nx">action</span><span class="p">();</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">calledCount</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">instance</span><span class="p">.</span><span class="nx">internalAction</span><span class="p">).</span><span class="nx">toHaveBeenCalled</span><span class="p">();</span>
+    <span class="p">});</span>
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="setting-an-around-callback">Setting an around callback</h3>
+
+<p>The event will be passed to the around callback.  The around callback
+must call the event.
+<a id="setting-an-around-callback"></a></p></div></div><div class="code"><div class="wrapper">    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should trigger around callback&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>...</p></div></div><div class="code"><div class="wrapper">        <span class="nx">MyModel</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;around&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">calledCount</span> <span class="o">=</span> <span class="nx">calledCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            
+            <span class="c1">//calling the event inside of the callback</span>
+            <span class="nx">event</span><span class="p">();</span>
+        <span class="p">});</span>
+        <span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyModel</span><span class="p">();</span>
+        <span class="nx">instance</span><span class="p">.</span><span class="nx">action</span><span class="p">();</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">calledCount</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">instance</span><span class="p">.</span><span class="nx">internalAction</span><span class="p">).</span><span class="nx">toHaveBeenCalled</span><span class="p">();</span>
+    <span class="p">});</span>
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>If there are multiple around callbacks, each one will be passed
+along to the next callback in the list, so the event itself
+will only be called once.  (If this doesn't make sense, just don't
+think about it.  The main point is that multiple around callbacks work
+as you would expect.)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should trigger multiple around callbacks&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">callback</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">calledCount</span> <span class="o">=</span> <span class="nx">calledCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="nx">event</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="nx">MyModel</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;around&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+        <span class="nx">MyModel</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;around&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyModel</span><span class="p">();</span>
+        <span class="nx">instance</span><span class="p">.</span><span class="nx">action</span><span class="p">();</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">calledCount</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">instance</span><span class="p">.</span><span class="nx">internalAction</span><span class="p">.</span><span class="nx">calls</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">});</span>
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="setting-an-after-callback">Setting an after callback</h3>
+
+<p><a id="setting-an-after-callback"></a></p></div></div><div class="code"><div class="wrapper">    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should trigger after callback&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">MyModel</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;after&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">calledCount</span> <span class="o">=</span> <span class="nx">calledCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">});</span>
+        <span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyModel</span><span class="p">();</span>
+        <span class="nx">instance</span><span class="p">.</span><span class="nx">action</span><span class="p">();</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">calledCount</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">instance</span><span class="p">.</span><span class="nx">internalAction</span><span class="p">).</span><span class="nx">toHaveBeenCalled</span><span class="p">();</span>
+    <span class="p">});</span>
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="this-inside-a-callback">'this' inside a callback</h3>
+
+<p>Callbacks are called in the context of the instance, so
+inside of a callback 'this' refers to the 
+<a id="this-inside-a-callback"></a></p></div></div><div class="code"><div class="wrapper">    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should call callbacks in the context of the instance&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>...</p></div></div><div class="code"><div class="wrapper">        <span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyModel</span><span class="p">();</span>
+        
+        <span class="nx">MyModel</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">calledCount</span> <span class="o">=</span> <span class="nx">calledCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="nx">expect</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="nx">instance</span><span class="p">);</span>
+        <span class="p">});</span>
+        
+        <span class="nx">instance</span><span class="p">.</span><span class="nx">action</span><span class="p">();</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">calledCount</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">});</span>
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="calling-setcallback-with-the-name-of-an-instance-method">calling setCallback with the name of an instance method</h3>
+
+<p>Instead of passing a function to setCallback, you can pass
+the name of an instance method.
+<a id="setCallback-with-instance-method"></a></p></div></div><div class="code"><div class="wrapper">    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should support a method name instead of a function as the callback&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>...</p></div></div><div class="code"><div class="wrapper">        <span class="nx">MyModel</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">callback</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">calledCount</span> <span class="o">=</span> <span class="nx">calledCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">};</span>
+        
+        <span class="c1">//&#39;callback&#39; is the name of an instance method on MyModel</span>
+        <span class="nx">MyModel</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="s1">&#39;callback&#39;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyModel</span><span class="p">();</span>
+        <span class="nx">instance</span><span class="p">.</span><span class="nx">action</span><span class="p">();</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">calledCount</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">instance</span><span class="p">.</span><span class="nx">internalAction</span><span class="p">).</span><span class="nx">toHaveBeenCalled</span><span class="p">();</span>
+    <span class="p">});</span>  
+    
+    <span class="c1">//see https://trello.com/c/VTRlLmoH/52-supermodel-callbacks-will-be-called-on-sibling-classes</span>
+    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should not apply callbacks to sibling classes&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">subclass1CallbackCalled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">subclass2CallbackCalled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">SubClass1</span> <span class="o">=</span> <span class="nx">MyModel</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;after&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">subclass1CallbackCalled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">});</span>
+            
+            <span class="k">return</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get rid of functionality from superclass</p></div></div><div class="code"><div class="wrapper">                <span class="nx">internalAction</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{}</span>
+            <span class="p">};</span>
+        <span class="p">});</span>
+        <span class="kd">var</span> <span class="nx">SubClass2</span> <span class="o">=</span> <span class="nx">MyModel</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;after&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">subclass2CallbackCalled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">});</span>
+            
+            <span class="k">return</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get rid of functionality from superclass</p></div></div><div class="code"><div class="wrapper">                <span class="nx">internalAction</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{}</span>
+            <span class="p">};</span>
+        <span class="p">});</span>
+        
+        <span class="k">new</span> <span class="nx">SubClass1</span><span class="p">().</span><span class="nx">action</span><span class="p">();</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">subclass1CallbackCalled</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">subclass2CallbackCalled</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+    <span class="p">});</span>
+
+
+<span class="p">});</span></div></div></div></div></body></html>
