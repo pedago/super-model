@@ -137,7 +137,33 @@ the name of an instance method.
         <span class="nx">instance</span><span class="p">.</span><span class="nx">action</span><span class="p">();</span>
         <span class="nx">expect</span><span class="p">(</span><span class="nx">calledCount</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
         <span class="nx">expect</span><span class="p">(</span><span class="nx">instance</span><span class="p">.</span><span class="nx">internalAction</span><span class="p">).</span><span class="nx">toHaveBeenCalled</span><span class="p">();</span>
-    <span class="p">});</span>   
+    <span class="p">});</span>  
+    
+    <span class="c1">//see https://trello.com/c/VTRlLmoH/52-supermodel-callbacks-will-be-called-on-sibling-classes</span>
+    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should not apply callbacks to sibling classes&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">subclass1CallbackCalled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">subclass2CallbackCalled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">SubClass1</span> <span class="o">=</span> <span class="nx">MyModel</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;after&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">subclass1CallbackCalled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">});</span>
+            
+            <span class="k">return</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get rid of functionality from superclass</p></div></div><div class="code"><div class="wrapper">                <span class="nx">internalAction</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{}</span>
+            <span class="p">};</span>
+        <span class="p">});</span>
+        <span class="kd">var</span> <span class="nx">SubClass2</span> <span class="o">=</span> <span class="nx">MyModel</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">setCallback</span><span class="p">(</span><span class="s1">&#39;after&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">subclass2CallbackCalled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">});</span>
+            
+            <span class="k">return</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get rid of functionality from superclass</p></div></div><div class="code"><div class="wrapper">                <span class="nx">internalAction</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{}</span>
+            <span class="p">};</span>
+        <span class="p">});</span>
+        
+        <span class="k">new</span> <span class="nx">SubClass1</span><span class="p">().</span><span class="nx">action</span><span class="p">();</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">subclass1CallbackCalled</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">subclass2CallbackCalled</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+    <span class="p">});</span>
 
 
 <span class="p">});</span></div></div></div></div></body></html>

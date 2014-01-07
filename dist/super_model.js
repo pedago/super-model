@@ -27,30 +27,40 @@ angular.module('SuperModel')
         return {
             
             included: function(SuperModel) {
-                SuperModel.extendableObject('definedCallbacks');
+                SuperModel.extendableArray('definedCallbacks');
             },
             
             classMixin: {
                 defineCallbacks: function() {
                     angular.forEach(arguments, function(arg){
-                        this.definedCallbacks().set(arg, {
-                            before: [], 
-                            after: [],
-                            around: []
-                        });
-                    }.bind(this));                    
+                        var callbackLists = {};
+                        
+                        // create 3 extendable arrays for the before, after, and around callback lists
+                        angular.forEach(['before', 'after', 'around'], function(type) {
+                            // create an extendable array with a name like "___after_action_callbacks" 
+                            this.extendableArray(this._callbackListProp(arg, type));
+                        }.bind(this));
+                        this.definedCallbacks().push(arg);
+                    }.bind(this));
                 },
                 
                 setCallback: function(type, name, callback) {
                     this._callbackList(name, type).push(callback);                    
                 },
                 
+                _callbackListProp: function(name, type) {
+                    // i.e. "after_action_callbacks"
+                    return ['__', type, name, 'callbacks'].join('_');
+                },
+                
                 _callbackList: function(name, type) {
-                    var callbackList = this.definedCallbacks()[name];
-                    if (!callbackList) {
+                    var callbackList =[name];
+                    if (this.definedCallbacks().indexOf(name) === -1) {
                         throw new Error('Callbacks on '+name+' are not supported.  If you want to support them, you need to call defineCallbacks('+name+')');
                     }
-                    return callbackList[type];
+                    // something like "___after_action_callbacks"  
+                    var prop = this._callbackListProp(name, type);
+                    return this[prop]();
                 }
             },
             

@@ -4,30 +4,32 @@
         <span class="k">return</span> <span class="p">{</span>
             
             <span class="nx">included</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">SuperModel</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">SuperModel</span><span class="p">.</span><span class="nx">extendableObject</span><span class="p">(</span><span class="s1">&#39;definedCallbacks&#39;</span><span class="p">);</span>
+                <span class="nx">SuperModel</span><span class="p">.</span><span class="nx">extendableArray</span><span class="p">(</span><span class="s1">&#39;definedCallbacks&#39;</span><span class="p">);</span>
             <span class="p">},</span>
             
             <span class="nx">classMixin</span><span class="o">:</span> <span class="p">{</span>
                 <span class="nx">defineCallbacks</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
                     <span class="nx">angular</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">arg</span><span class="p">){</span>
-                        <span class="k">this</span><span class="p">.</span><span class="nx">definedCallbacks</span><span class="p">().</span><span class="nx">set</span><span class="p">(</span><span class="nx">arg</span><span class="p">,</span> <span class="p">{</span>
-                            <span class="nx">before</span><span class="o">:</span> <span class="p">[],</span> 
-                            <span class="nx">after</span><span class="o">:</span> <span class="p">[],</span>
-                            <span class="nx">around</span><span class="o">:</span> <span class="p">[]</span>
-                        <span class="p">});</span>
-                    <span class="p">}.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>                    
+                        <span class="kd">var</span> <span class="nx">callbackLists</span> <span class="o">=</span> <span class="p">{};</span>
+                        </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create 3 extendable arrays for the before, after, and around callback lists</p></div></div><div class="code"><div class="wrapper">                        <span class="nx">angular</span><span class="p">.</span><span class="nx">forEach</span><span class="p">([</span><span class="s1">&#39;before&#39;</span><span class="p">,</span> <span class="s1">&#39;after&#39;</span><span class="p">,</span> <span class="s1">&#39;around&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create an extendable array with a name like "<em>_</em>after<em>action</em>callbacks" </p></div></div><div class="code"><div class="wrapper">                            <span class="k">this</span><span class="p">.</span><span class="nx">extendableArray</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_callbackListProp</span><span class="p">(</span><span class="nx">arg</span><span class="p">,</span> <span class="nx">type</span><span class="p">));</span>
+                        <span class="p">}.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">definedCallbacks</span><span class="p">().</span><span class="nx">push</span><span class="p">(</span><span class="nx">arg</span><span class="p">);</span>
+                    <span class="p">}.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
                 <span class="p">},</span>
                 
                 <span class="nx">setCallback</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
                     <span class="k">this</span><span class="p">.</span><span class="nx">_callbackList</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">type</span><span class="p">).</span><span class="nx">push</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>                    
                 <span class="p">},</span>
                 
+                <span class="nx">_callbackListProp</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">type</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>i.e. "after<em>action</em>callbacks"</p></div></div><div class="code"><div class="wrapper">                    <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;__&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="s1">&#39;callbacks&#39;</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">);</span>
+                <span class="p">},</span>
+                
                 <span class="nx">_callbackList</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="kd">var</span> <span class="nx">callbackList</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">definedCallbacks</span><span class="p">()[</span><span class="nx">name</span><span class="p">];</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">callbackList</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">callbackList</span> <span class="o">=</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">definedCallbacks</span><span class="p">().</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
                         <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Callbacks on &#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39; are not supported.  If you want to support them, you need to call defineCallbacks(&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;)&#39;</span><span class="p">);</span>
-                    <span class="p">}</span>
-                    <span class="k">return</span> <span class="nx">callbackList</span><span class="p">[</span><span class="nx">type</span><span class="p">];</span>
+                    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>something like "<em>_</em>after<em>action</em>callbacks"  </p></div></div><div class="code"><div class="wrapper">                    <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_callbackListProp</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">type</span><span class="p">);</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="p">[</span><span class="nx">prop</span><span class="p">]();</span>
                 <span class="p">}</span>
             <span class="p">},</span>
             

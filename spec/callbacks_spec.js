@@ -172,7 +172,7 @@ describe('SuperModel.Callbacks', function() {
             });
             
             return {
-                // get rid of this functionality
+                // get rid of functionality from superclass
                 internalAction: function() {}
             };
         });
@@ -182,7 +182,7 @@ describe('SuperModel.Callbacks', function() {
             });
             
             return {
-                // get rid of this functionality
+                // get rid of functionality from superclass
                 internalAction: function() {}
             };
         });
