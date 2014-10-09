@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="en"><head><title>scripts/super_model</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="scripts/super_model"><meta name="groc-project-path" content="scripts/super_model.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">scripts/super_model.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">angular.module(<span class="hljs-string">'SuperModel'</span>, [<span class="hljs-string">'AClassAbove'</span>])
+.provider(<span class="hljs-string">'SuperModel'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+        
+        <span class="hljs-keyword">this</span>.$get = [<span class="hljs-string">'AClassAbove'</span>, <span class="hljs-string">'SuperModel.Callbacks'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Class, Callbacks)</span> {</span>
+            <span class="hljs-keyword">var</span> plugins = <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">1</span>);
+            <span class="hljs-keyword">var</span> SuperModel = Class.subclass(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+            
+                angular.forEach(plugins, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mixins)</span>{</span>
+                    <span class="hljs-keyword">this</span>.extend(mixins.classMixin || {});
+                    <span class="hljs-keyword">this</span>.include(mixins.instanceMixin || {});
+                    <span class="hljs-keyword">if</span> (mixins.included) {
+                        mixins.included(<span class="hljs-keyword">this</span>);
+                    }
+                }.bind(<span class="hljs-keyword">this</span>));
+            
+                <span class="hljs-keyword">return</span> {};
+            
+            });
+            
+            <span class="hljs-keyword">return</span> SuperModel;
+        }];
+        
+    });</div></div></div></div></body></html>

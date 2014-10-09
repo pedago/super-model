@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en"><head><title>spec/callbacks_spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="spec/callbacks_spec"><meta name="groc-project-path" content="spec/callbacks_spec.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">spec/callbacks_spec.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">'use strict'</span>;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="supermodelcallbacks">SuperModel.Callbacks</h1>
+<p>Callbacks are code hooks that are run at key points in an object&#39;s lifecycle. 
+The typical use case is to have a base class define a set of callbacks relevant to the other 
+functionality it supplies, so that subclasses can install callbacks that enhance or modify 
+the base functionality without needing to override or redefine methods of the base class.  </p>
+<p>SuperModel allows you to define the events in the object’s lifecycle that will support callbacks 
+(via the class method define_callbacks), set the instance methods or functions to be called 
+(via the class method set_callback), and run the installed callbacks at the appropriate times (via run_callbacks).  </p>
+<p>Three kinds of callbacks are supported:   </p>
+<p><strong>before</strong> callbacks, run before a certain event;<br><strong>after</strong> callbacks, run after the event;<br><strong>around</strong> callbacks, blocks that surround the event, triggering the event within the callback.  </p>
+<p>Callback code can be contained in instance methods or functions.</p>
+<p> <a href="#abcd">link text</a></p></div></div><div class="code"><div class="wrapper"> 
+ 
+
+
+
+describe(<span class="hljs-string">'SuperModel.Callbacks'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+
+    <span class="hljs-keyword">var</span> MyModel, SuperModel, callbacks, calledCount;
+
+    beforeEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        module(<span class="hljs-string">'SuperModel'</span>);
+        calledCount = <span class="hljs-number">0</span>;
+
+        inject(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(_SuperModel_)</span> {</span>
+            SuperModel = _SuperModel_;
+            </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="defining-callbacks">Defining callbacks</h3>
+<p>use the class method <em>defineCallbacks</em> to define an event that supports callbacks,
+and then use the classMethod <em>runCallbacks</em> to trigger the callbacks when that
+event occurs.</p></div></div><div class="code"><div class="wrapper">            MyModel = SuperModel.subclass(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>... </p></div></div><div class="code"><div class="wrapper">                <span class="hljs-comment">//define the callback</span>
+                <span class="hljs-keyword">this</span>.defineCallbacks(<span class="hljs-string">'action'</span>);
+                
+                <span class="hljs-keyword">return</span> {
+                    action: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                        <span class="hljs-comment">//trigger the callback</span>
+                        <span class="hljs-keyword">this</span>.runCallbacks(<span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                            <span class="hljs-keyword">this</span>.internalAction();
+                        });
+                    },
+                    internalAction: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                        expect(<span class="hljs-keyword">this</span>.constructor).toBe(MyModel);
+                    }
+                };
+            });
+            
+            spyOn(MyModel.prototype, <span class="hljs-string">'internalAction'</span>).andCallThrough();
+        });
+
+    });
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="setting-a-before-callback">Setting a before callback</h3>
+<p><a id="setting-a-before-callback"></a></p></div></div><div class="code"><div class="wrapper">    it(<span class="hljs-string">'should trigger before callback'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        MyModel.setCallback(<span class="hljs-string">'before'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+            calledCount = calledCount + <span class="hljs-number">1</span>;
+        });
+        <span class="hljs-keyword">var</span> instance = <span class="hljs-keyword">new</span> MyModel();
+        instance.action();
+        expect(calledCount).toBe(<span class="hljs-number">1</span>);
+        expect(instance.internalAction).toHaveBeenCalled();
+    });
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="setting-an-around-callback">Setting an around callback</h3>
+<p>The event will be passed to the around callback.  The around callback
+must call the event.
+<a id="setting-an-around-callback"></a></p></div></div><div class="code"><div class="wrapper">    it(<span class="hljs-string">'should trigger around callback'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>...</p></div></div><div class="code"><div class="wrapper">        MyModel.setCallback(<span class="hljs-string">'around'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(event)</span> {</span>
+            calledCount = calledCount + <span class="hljs-number">1</span>;
+            
+            <span class="hljs-comment">//calling the event inside of the callback</span>
+            event();
+        });
+        <span class="hljs-keyword">var</span> instance = <span class="hljs-keyword">new</span> MyModel();
+        instance.action();
+        expect(calledCount).toBe(<span class="hljs-number">1</span>);
+        expect(instance.internalAction).toHaveBeenCalled();
+    });
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>If there are multiple around callbacks, each one will be passed
+along to the next callback in the list, so the event itself
+will only be called once.  (If this doesn&#39;t make sense, just don&#39;t
+think about it.  The main point is that multiple around callbacks work
+as you would expect.)</p></div></div><div class="code"><div class="wrapper">    it(<span class="hljs-string">'should trigger multiple around callbacks'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-keyword">var</span> callback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(event)</span> {</span>
+            calledCount = calledCount + <span class="hljs-number">1</span>;
+            event();
+        }
+        MyModel.setCallback(<span class="hljs-string">'around'</span>, <span class="hljs-string">'action'</span>, callback);
+        MyModel.setCallback(<span class="hljs-string">'around'</span>, <span class="hljs-string">'action'</span>, callback);
+        <span class="hljs-keyword">var</span> instance = <span class="hljs-keyword">new</span> MyModel();
+        instance.action();
+        expect(calledCount).toBe(<span class="hljs-number">2</span>);
+        expect(instance.internalAction.calls.length).toBe(<span class="hljs-number">1</span>);
+    });
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="setting-an-after-callback">Setting an after callback</h3>
+<p><a id="setting-an-after-callback"></a></p></div></div><div class="code"><div class="wrapper">    it(<span class="hljs-string">'should trigger after callback'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        MyModel.setCallback(<span class="hljs-string">'after'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+            calledCount = calledCount + <span class="hljs-number">1</span>;
+        });
+        <span class="hljs-keyword">var</span> instance = <span class="hljs-keyword">new</span> MyModel();
+        instance.action();
+        expect(calledCount).toBe(<span class="hljs-number">1</span>);
+        expect(instance.internalAction).toHaveBeenCalled();
+    });
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="39this39-inside-a-callback">&#39;this&#39; inside a callback</h3>
+<p>Callbacks are called in the context of the instance, so
+inside of a callback &#39;this&#39; refers to the 
+<a id="this-inside-a-callback"></a></p></div></div><div class="code"><div class="wrapper">    it(<span class="hljs-string">'should call callbacks in the context of the instance'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>...</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> instance = <span class="hljs-keyword">new</span> MyModel();
+        
+        MyModel.setCallback(<span class="hljs-string">'before'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+            calledCount = calledCount + <span class="hljs-number">1</span>;
+            expect(<span class="hljs-keyword">this</span>).toBe(instance);
+        });
+        
+        instance.action();
+        expect(calledCount).toBe(<span class="hljs-number">1</span>);
+    });
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="calling-setcallback-with-the-name-of-an-instance-method">calling setCallback with the name of an instance method</h3>
+<p>Instead of passing a function to setCallback, you can pass
+the name of an instance method.
+<a id="setCallback-with-instance-method"></a></p></div></div><div class="code"><div class="wrapper">    it(<span class="hljs-string">'should support a method name instead of a function as the callback'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>...</p></div></div><div class="code"><div class="wrapper">        MyModel.prototype.callback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+            calledCount = calledCount + <span class="hljs-number">1</span>;
+        };
+        
+        <span class="hljs-comment">//'callback' is the name of an instance method on MyModel</span>
+        MyModel.setCallback(<span class="hljs-string">'before'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-string">'callback'</span>);
+        <span class="hljs-keyword">var</span> instance = <span class="hljs-keyword">new</span> MyModel();
+        instance.action();
+        expect(calledCount).toBe(<span class="hljs-number">1</span>);
+        expect(instance.internalAction).toHaveBeenCalled();
+    });  
+    
+    <span class="hljs-comment">//see https://trello.com/c/VTRlLmoH/52-supermodel-callbacks-will-be-called-on-sibling-classes</span>
+    it(<span class="hljs-string">'should not apply callbacks to sibling classes'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-keyword">var</span> subclass1CallbackCalled = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">var</span> subclass2CallbackCalled = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">var</span> SubClass1 = MyModel.subclass(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+            <span class="hljs-keyword">this</span>.setCallback(<span class="hljs-string">'after'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                subclass1CallbackCalled = <span class="hljs-literal">true</span>;
+            });
+            
+            <span class="hljs-keyword">return</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get rid of functionality from superclass</p></div></div><div class="code"><div class="wrapper">                internalAction: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>}
+            };
+        });
+        <span class="hljs-keyword">var</span> SubClass2 = MyModel.subclass(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+            <span class="hljs-keyword">this</span>.setCallback(<span class="hljs-string">'after'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                subclass2CallbackCalled = <span class="hljs-literal">true</span>;
+            });
+            
+            <span class="hljs-keyword">return</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get rid of functionality from superclass</p></div></div><div class="code"><div class="wrapper">                internalAction: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>}
+            };
+        });
+        
+        <span class="hljs-keyword">new</span> SubClass1().action();
+        expect(subclass1CallbackCalled).toBe(<span class="hljs-literal">true</span>);
+        expect(subclass2CallbackCalled).toBe(<span class="hljs-literal">false</span>);
+    });
+
+
+});</div></div></div></div></body></html>
