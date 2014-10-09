@@ -42,8 +42,8 @@ there for more information.
 
 ### Documentation
 
-[0.0.11](http://pedago.github.io/super-model/docs/0.0.11)
-[0.0.10](http://pedago.github.io/super-model/docs/0.0.10)
+[0.0.11](http://pedago.github.io/super-model/docs/0.0.11)  
+[0.0.10](http://pedago.github.io/super-model/docs/0.0.10)  
 [0.0.9](http://pedago.github.io/super-model/docs/0.0.9)  
 [0.0.8](http://pedago.github.io/super-model/docs/0.0.8)  
 [0.0.7](http://pedago.github.io/super-model/docs/0.0.7)  
