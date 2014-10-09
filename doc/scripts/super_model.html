@@ -1,23 +1,23 @@
-<!DOCTYPE html><html lang="en"><head><title>scripts/super_model</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="scripts/super_model"><meta name="groc-project-path" content="scripts/super_model.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">scripts/super_model.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;SuperModel&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;AClassAbove&#39;</span><span class="p">])</span>
-<span class="p">.</span><span class="nx">provider</span><span class="p">(</span><span class="s1">&#39;SuperModel&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<!DOCTYPE html><html lang="en"><head><title>scripts/super_model</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="scripts/super_model"><meta name="groc-project-path" content="scripts/super_model.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">scripts/super_model.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">angular.module(<span class="hljs-string">'SuperModel'</span>, [<span class="hljs-string">'AClassAbove'</span>])
+.provider(<span class="hljs-string">'SuperModel'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
         
-        <span class="k">this</span><span class="p">.</span><span class="nx">$get</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AClassAbove&#39;</span><span class="p">,</span> <span class="s1">&#39;SuperModel.Callbacks&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Class</span><span class="p">,</span> <span class="nx">Callbacks</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">plugins</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">SuperModel</span> <span class="o">=</span> <span class="nx">Class</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="hljs-keyword">this</span>.$get = [<span class="hljs-string">'AClassAbove'</span>, <span class="hljs-string">'SuperModel.Callbacks'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Class, Callbacks)</span> {</span>
+            <span class="hljs-keyword">var</span> plugins = <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">1</span>);
+            <span class="hljs-keyword">var</span> SuperModel = Class.subclass(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
             
-                <span class="nx">angular</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">plugins</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">mixins</span><span class="p">){</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">mixins</span><span class="p">.</span><span class="nx">classMixin</span> <span class="o">||</span> <span class="p">{});</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">mixins</span><span class="p">.</span><span class="nx">instanceMixin</span> <span class="o">||</span> <span class="p">{});</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">mixins</span><span class="p">.</span><span class="nx">included</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="nx">mixins</span><span class="p">.</span><span class="nx">included</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-                    <span class="p">}</span>
-                <span class="p">}.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                angular.forEach(plugins, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mixins)</span>{</span>
+                    <span class="hljs-keyword">this</span>.extend(mixins.classMixin || {});
+                    <span class="hljs-keyword">this</span>.include(mixins.instanceMixin || {});
+                    <span class="hljs-keyword">if</span> (mixins.included) {
+                        mixins.included(<span class="hljs-keyword">this</span>);
+                    }
+                }.bind(<span class="hljs-keyword">this</span>));
             
-                <span class="k">return</span> <span class="p">{};</span>
+                <span class="hljs-keyword">return</span> {};
             
-            <span class="p">});</span>
+            });
             
-            <span class="k">return</span> <span class="nx">SuperModel</span><span class="p">;</span>
-        <span class="p">}];</span>
+            <span class="hljs-keyword">return</span> SuperModel;
+        }];
         
-    <span class="p">});</span></div></div></div></div></body></html>
+    });</div></div></div></div></body></html>

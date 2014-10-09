@@ -9,11 +9,11 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       "type": "file",
       "data": {
         "language": {
-          "nameMatchers": [".md"],
+          "nameMatchers": [".md", ".markdown", ".mkd", ".mkdn", ".mdown"],
           "commentsOnly": true,
           "name": "Markdown"
         },
-        "sourcePath": "/Users/nbrustein/code/super-model/doc.md",
+        "sourcePath": "/Users/brent/Development/Pedago/super-model/doc.md",
         "projectPath": "doc.md",
         "targetPath": "index",
         "pageTitle": "index",
@@ -41,7 +41,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/nbrustein/code/super-model/scripts/callbacks.js",
+            "sourcePath": "/Users/brent/Development/Pedago/super-model/scripts/callbacks.js",
             "projectPath": "scripts/callbacks.js",
             "targetPath": "scripts/callbacks",
             "pageTitle": "scripts/callbacks",
@@ -61,7 +61,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/nbrustein/code/super-model/scripts/super_model.js",
+            "sourcePath": "/Users/brent/Development/Pedago/super-model/scripts/super_model.js",
             "projectPath": "scripts/super_model.js",
             "targetPath": "scripts/super_model",
             "pageTitle": "scripts/super_model",
@@ -91,7 +91,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/nbrustein/code/super-model/spec/callbacks_spec.js",
+            "sourcePath": "/Users/brent/Development/Pedago/super-model/spec/callbacks_spec.js",
             "projectPath": "spec/callbacks_spec.js",
             "targetPath": "spec/callbacks_spec",
             "pageTitle": "spec/callbacks_spec",
@@ -144,8 +144,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "type": "heading",
                   "data": {
                     "level": 3,
-                    "title": "'this' inside a callback",
-                    "slug": "this-inside-a-callback"
+                    "title": "&#39;this&#39; inside a callback",
+                    "slug": "39this39-inside-a-callback"
                   },
                   "depth": 3
                 }, {
