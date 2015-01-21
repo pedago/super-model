@@ -24,8 +24,8 @@ Callback code can be contained in instance methods or functions.
 
  [link text](#abcd)
  */
- 
- 
+
+
 
 
 
@@ -39,7 +39,7 @@ describe('SuperModel.Callbacks', function() {
 
         inject(function(_SuperModel_) {
             SuperModel = _SuperModel_;
-            
+
             // ### Defining callbacks
             // use the class method _defineCallbacks_ to define an event that supports callbacks,
             // and then use the classMethod _runCallbacks_ to trigger the callbacks when that
@@ -48,7 +48,7 @@ describe('SuperModel.Callbacks', function() {
                 // ... 
                 //define the callback
                 this.defineCallbacks('action');
-                
+
                 return {
                     action: function() {
                         //trigger the callback
@@ -61,12 +61,12 @@ describe('SuperModel.Callbacks', function() {
                     }
                 };
             });
-            
-            spyOn(MyModel.prototype, 'internalAction').andCallThrough();
+
+            spyOn(MyModel.prototype, 'internalAction').and.callThrough();
         });
 
     });
-    
+
     // ### Setting a before callback
     // <a id="setting-a-before-callback"></a>
     it('should trigger before callback', function() {
@@ -78,7 +78,7 @@ describe('SuperModel.Callbacks', function() {
         expect(calledCount).toBe(1);
         expect(instance.internalAction).toHaveBeenCalled();
     });
-    
+
     // ### Setting an around callback
     // The event will be passed to the around callback.  The around callback
     // must call the event.
@@ -87,7 +87,7 @@ describe('SuperModel.Callbacks', function() {
         // ...
         MyModel.setCallback('around', 'action', function(event) {
             calledCount = calledCount + 1;
-            
+
             //calling the event inside of the callback
             event();
         });
@@ -96,7 +96,7 @@ describe('SuperModel.Callbacks', function() {
         expect(calledCount).toBe(1);
         expect(instance.internalAction).toHaveBeenCalled();
     });
-    
+
     // If there are multiple around callbacks, each one will be passed
     // along to the next callback in the list, so the event itself
     // will only be called once.  (If this doesn't make sense, just don't
@@ -112,9 +112,9 @@ describe('SuperModel.Callbacks', function() {
         var instance = new MyModel();
         instance.action();
         expect(calledCount).toBe(2);
-        expect(instance.internalAction.calls.length).toBe(1);
+        expect(instance.internalAction.calls.count()).toBe(1);
     });
-    
+
     // ### Setting an after callback
     // <a id="setting-an-after-callback"></a>
     it('should trigger after callback', function() {
@@ -126,7 +126,7 @@ describe('SuperModel.Callbacks', function() {
         expect(calledCount).toBe(1);
         expect(instance.internalAction).toHaveBeenCalled();
     });
-    
+
     // ### 'this' inside a callback
     // Callbacks are called in the context of the instance, so
     // inside of a callback 'this' refers to the 
@@ -134,16 +134,16 @@ describe('SuperModel.Callbacks', function() {
     it('should call callbacks in the context of the instance', function() {
         // ...
         var instance = new MyModel();
-        
+
         MyModel.setCallback('before', 'action', function() {
             calledCount = calledCount + 1;
             expect(this).toBe(instance);
         });
-        
+
         instance.action();
         expect(calledCount).toBe(1);
     });
-    
+
     // ### calling setCallback with the name of an instance method
     // Instead of passing a function to setCallback, you can pass
     // the name of an instance method.
@@ -153,40 +153,40 @@ describe('SuperModel.Callbacks', function() {
         MyModel.prototype.callback = function() {
             calledCount = calledCount + 1;
         };
-        
+
         //'callback' is the name of an instance method on MyModel
         MyModel.setCallback('before', 'action', 'callback');
         var instance = new MyModel();
         instance.action();
         expect(calledCount).toBe(1);
         expect(instance.internalAction).toHaveBeenCalled();
-    });  
-    
+    });
+
     //see https://trello.com/c/VTRlLmoH/52-supermodel-callbacks-will-be-called-on-sibling-classes
     it('should not apply callbacks to sibling classes', function() {
         var subclass1CallbackCalled = false;
         var subclass2CallbackCalled = false;
-        var SubClass1 = MyModel.subclass(function(){
+        var SubClass1 = MyModel.subclass(function() {
             this.setCallback('after', 'action', function() {
                 subclass1CallbackCalled = true;
             });
-            
+
             return {
                 // get rid of functionality from superclass
                 internalAction: function() {}
             };
         });
-        var SubClass2 = MyModel.subclass(function(){
+        var SubClass2 = MyModel.subclass(function() {
             this.setCallback('after', 'action', function() {
                 subclass2CallbackCalled = true;
             });
-            
+
             return {
                 // get rid of functionality from superclass
                 internalAction: function() {}
             };
         });
-        
+
         new SubClass1().action();
         expect(subclass1CallbackCalled).toBe(true);
         expect(subclass2CallbackCalled).toBe(false);
